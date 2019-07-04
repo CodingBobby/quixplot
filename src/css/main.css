@@ -1,0 +1,19 @@
+* {
+   margin: 0px;
+   padding: 0px;
+}
+
+.dragger {
+   height: 20px;
+   -webkit-app-region: drag;
+}
+
+body {
+   color: #D2CDCC;
+   background-color: #18192B;
+}
+
+#content {
+   padding: 5px 20px 10px 20px;
+   height: 100%;
+}
