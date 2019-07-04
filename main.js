@@ -37,7 +37,11 @@ const windowOptions = {
    icon: darwin ? path.join(__dirname, 'assets/icons/app.icns')
       : path.join(__dirname, 'assets/icons/app.ico'),
    show: true,
-   center: true
+   center: true,
+   webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: true
+    }
 }
 
 // here we create a template for the main menu,

@@ -4,14 +4,47 @@
     <meta charset="UTF-8">
     <title>QuixPlot</title>
     <link rel="stylesheet" href="src/css/main.css">
-    <script src="./index.js"></script>
+    <link rel="stylesheet" href="src/css/elements.css">
   </head>
   <body>
     <div class="dragger"></div>
     <div id="content">
       <h1>QuixPlot</h1>
 
-      <button onclick="testAlert('Hello World')">Test Alert</button>
+      <div class="overlay">
+        <form id="function_overlay">
+            <input name="function" type="text" size="30" placeholder="function goes here">
+            <input type="submit" value="plot" onclick="submitFunction()">
+        </form>
+      </div>
+
+
+      <div class="section" id="plot_area">
+        <canvas class="plot_canvas" id="main_plot"></canvas>
+      </div>
+
+      <div class="section" id="tools_area">
+        <li class="tool_list" id="axis_selection">
+          <ul class="selecter" id="x_axis_selecter">
+            <h5>x-axis:</h5>
+            <select name="x_select_menu">
+              <option value="x" selected>x</option>
+              <option value="y">y</option>
+            </select>
+          </ul>
+
+          <ul class="selecter" id="y_axis_selecter">
+            <h5>y-axis:</h5>
+            <select name="y_select_menu">
+              <option value="y" selected>y</option>
+              <option value="x">x</option>
+            </select>
+          </ul>
+        </li>
+        <li class="tool_list" id="constant_definition"></li>
+      </div>
+
     </div>
+    <script src="./index.js"></script>
   </body>
 </html>

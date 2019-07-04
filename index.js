@@ -1,43 +1,46 @@
-const fs = require('fs')
+// const fs = require('fs')
 
-function newFile() {
-   fs.writeFile('undefined.cvs', '', err => {
-      if(err) return console.error(err)
-      let pop = new Popup(template.newFile)
-      pop.show()
-   })
+// PLOTTING
+let canvas = document.getElementById('main_plot')
+let ctx = canvas.getContext('2d')
+let plotFunction
+
+
+function functionEvaluator(inputArgument, functionString) {
+   return new Function(`${inputArgument}`, `return ${functionString}`)
 }
 
-function testAlert(text) {
-   alert(text)
-}
 
-const template = {
-   newFile: {
-      type: 'note',
-      title: 'New file created.'
+function functionAnalyzer(string) {
+   let independent, dependent, functionString
+
+   
+
+   return {
+      independent: independent,
+      dependent: dependent,
+      function: functionEvaluator(independent, functionString)
    }
 }
 
-class Popup {
-   constructor(temp) {
-      this.options = temp
+
+function submitFunction() {
+   let form = document.getElementById('function_overlay')
+   let functionString = form.elements['function'].value
+
+   // remove spaces
+   functionString = functionString.split(' ').join('')
+   functionString = functionString.split('=')
+
+   let independent, dependent
+
+   if(functionString[0].length === 1) {
+      dependent = functionString[0]
+   }
+   if(functionString[1].includes('x')) {
+      independent = 'x'
    }
 
-   show() {
-      switch(this.options.type) {
-         case 'small': {
-            break
-         }
-         case 'full': {
-            break
-         }
-         case 'note': {
-            let pop = document.createElement('div')
-            pop.innerHTML = `<h5>${this.options.title}</h5>`
-            document.getElementById('content').appendChild(pop)
-            break
-         }
-      }
-   }
+   plotFunction = functionEvaluator(independent, functionString[1])
+   alert(dependent +' = '+ plotFunction(3))
 }
