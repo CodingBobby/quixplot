@@ -9,6 +9,9 @@ const fs = require('fs')
 const path = require('path')
 const http = require('http')
 const url = require('url')
+const math = require('mathjs')
+
+global.math = math
 
 // the electron items we need
 const {
@@ -28,7 +31,7 @@ let window = null
 // here we set some options we need later
 const windowOptions = {
    width: 900,
-   height: 650,
+   height: 600,
    resizable: false,
    useContentSize: true,
    titleBarStyle: 'hidden',
@@ -40,8 +43,8 @@ const windowOptions = {
    center: true,
    webPreferences: {
       nodeIntegration: true,
-      contextIsolation: true
-    }
+      contextIsolation: false
+   }
 }
 
 // here we create a template for the main menu,

@@ -18,6 +18,12 @@ h5 {
    width: min-content;
 }
 
+.overlay form input {
+   font-family: monospace;
+   font-size: large;
+}
+
+
 .tool_list {
    list-style: none;
 }
