@@ -1,8 +1,10 @@
 const math = remote.getGlobal('math')
 
+document.getElementById('start_screen').style.display = 'none'
+
 // PLOTTING
-let canvas = document.getElementById('main_plot')
-let ctx = canvas.getContext('2d')
+// let canvas = document.getElementById('main_plot')
+// let ctx = canvas.getContext('2d')
 let plotFunction
 
 function functionAnalyzer(string) {
@@ -54,8 +56,52 @@ function submitFunction() {
    let form = document.getElementById('function_overlay')
    let functionString = form.elements['function'].value
 
-   let plotFunction = functionAnalyzer(functionString)
+   plotFunction = functionAnalyzer(functionString)
 
    // hide the overlay
    document.getElementById('start_screen').style.display = 'none'
+
+   plotOnCanvas()
 }
+
+function plotOnCanvas() {
+   let data = [{
+      x: [1, 2, 3, 4],
+      y: [10, 15, 13, 17],
+      mode: 'lines',
+      line: {
+         dash: 'solid',
+         width: 1
+      }
+   }]
+
+   let layout = {
+      xaxis: {
+         range: [-1, 1],
+         autorange: false
+      },
+      yaxis: {
+         range: [-1, 1],
+         autorange: false
+      },
+      margin: {
+         l: 30,
+         r: 30,
+         t: 30,
+         b: 30
+      },
+      paper_bgcolor: '#f2f2f2',
+      plot_bgcolor: '#f2f2f2'
+   }
+
+   let options = {
+      displayModeBar: true,
+      showSendToCloud: true,
+      displaylogo: false,
+      modeBarButtonsToRemove: ['autoScale']
+   }
+
+   Plotly.newPlot('main_plot', data, layout, options)
+}
+
+plotOnCanvas()
