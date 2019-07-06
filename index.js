@@ -51,18 +51,20 @@ function functionAnalyzer(string) {
       if(expr.args) {
          for(let i in expr.args) {
             let arg = expr.args[i]
-            if(arg.hasOwnProperty('name')) { // SymbolNode
-               symbols.all.push(arg.name)
-               if(node.params.includes(arg.name)) { // variable
-                  symbols.variable.push({
-                     name: arg.name,
-                     value: 0
-                  })
-               } else { // constant value
-                  symbols.constant.push({
-                     name: arg.name,
-                     value: 1
-                  })
+            if(!arg.hasOwnProperty('args')) { // SymbolNode
+               if(!symbols.all.includes(arg.name)) {
+                  symbols.all.push(arg.name)
+                  if(node.params.includes(arg.name)) { // variable
+                     symbols.variable.push({
+                        name: arg.name,
+                        value: 0
+                     })
+                  } else { // constant value
+                     symbols.constant.push({
+                        name: arg.name,
+                        value: 1
+                     })
+                  }
                }
             } else { // OperatorNode
                findSymbols(node, arg)
