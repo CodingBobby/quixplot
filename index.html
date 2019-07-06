@@ -5,6 +5,8 @@
     <title>QuixPlot</title>
     <link rel="stylesheet" href="src/css/main.css">
     <link rel="stylesheet" href="src/css/elements.css">
+    <link href="https://fonts.googleapis.com/css?family=Karla:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.206/distr/fira_code.css">
     <!-- nodejs requiring -->
     <script>
       const remote = require('electron').remote;
@@ -20,12 +22,15 @@
       <div class="overlay" id="start_screen">
         <form id="function_overlay">
           <input id="function_enter" name="function" type="text" size="30" placeholder="enter a function here" onkeydown="if (event.keyCode == 13) { submitFunction(); return false; }">
+
+          <div id="greeting_msg">
+            Try f(x) = sin(x) + log(x+4)
+          </div>
         </form>
       </div>
 
 
       <div class="section" id="plot_area">
-        <!-- <canvas class="plot_canvas" id="main_plot" width="400" height="300"></canvas> -->
         <div id="main_plot" style="width:600px;height:500px;"></div>
       </div>
 

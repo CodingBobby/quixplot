@@ -1,6 +1,6 @@
 const math = remote.getGlobal('math')
 
-//document.getElementById('start_screen').style.display = 'none'
+// document.getElementById('start_screen').style.display = 'none'
 
 // Startup
 let enterField = document.getElementById('function_enter')
