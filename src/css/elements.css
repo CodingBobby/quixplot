@@ -134,6 +134,7 @@ h5 {
 }
 
 #greeting_msg {
+   cursor: pointer;
    margin-left: auto;
    margin-right: auto;
    font-size: large;

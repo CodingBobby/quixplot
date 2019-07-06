@@ -22,7 +22,7 @@ const {
 } = electron
 
 // configuration and boolean checks that we need frequently
-let config = JSON.parse(fs.readFileSync("./config.json", "utf8"))
+let config = JSON.parse(fs.readFileSync('./config.json', 'utf8'))
 let darwin = process.platform == 'darwin'
 
 // instances we define later on but need to be accessible globally
@@ -50,8 +50,14 @@ const windowOptions = {
 // here we create a template for the main menu,
 // to get the right shortcut, we check if we're running on darwin
 let menuTemplate = [{
-   label: 'File',
+   label: `${config.app.name}`,
    submenu: [{
+      label: 'New Function',
+      accelerator: 'CmdOrCtrl+N',
+      role: 'reload'
+   }, {
+      type: "separator"
+   }, {
       label: 'About',
       click() {
          shell.openExternal('https://codingbobby.xyz')
@@ -64,6 +70,14 @@ let menuTemplate = [{
          app.quit()
       }
    }]
+}, {
+   label: 'Edit',
+   submenu: [
+      { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
+      { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
+      { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
+      { label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' }
+   ]
 }]
 
 // if the app is in development mode, these menu items will be pushed
@@ -114,7 +128,7 @@ async function build() {
 
 // this function can be called to save changes in the config file
 function saveConfig() {
-  fs.writeFile("./config.json", JSON.stringify(config), err => {
+  fs.writeFile('./config.json', JSON.stringify(config), err => {
     if(err) console.error(err)
   })
 }

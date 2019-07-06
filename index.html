@@ -21,11 +21,9 @@
 
       <div class="overlay" id="start_screen">
         <form id="function_overlay">
-          <input id="function_enter" name="function" type="text" size="30" placeholder="enter a function here" onkeydown="if (event.keyCode == 13) { submitFunction(); return false; }">
+          <input id="function_enter" name="function" type="text" size="30" placeholder="enter a function here" value="f(x)=" onkeydown="if (event.keyCode == 13) { submitFunction(); return false; }">
 
-          <div id="greeting_msg">
-            Try f(x) = sin(x) + log(x+4)
-          </div>
+          <div id="greeting_msg" onclick="copyToForm()"></div>
         </form>
       </div>
 

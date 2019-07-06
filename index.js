@@ -4,7 +4,34 @@ const math = remote.getGlobal('math')
 
 // Startup
 let enterField = document.getElementById('function_enter')
+let len = enterField.value.length
 enterField.focus()
+// jumping to end of pre-entered text
+enterField.setSelectionRange(len, len)
+
+let greet = document.getElementById('greeting_msg')
+let opts = [
+   'sin(x) + log(x+4)',
+   'gamma(x)',
+   '1/x * cos(1/x)',
+   'nthRoot(x, 3)'
+]
+
+function pick(array) {
+   return array[Math.floor(Math.random() * array.length)]
+}
+
+let thePick = pick(opts)
+
+greet.append('Try f(x) = '+thePick)
+
+
+function copyToForm() { // interting text to from when clicking on it
+   enterField.value = 'f(x)='+thePick
+   enterField.focus()
+   len = enterField.value.length
+   enterField.setSelectionRange(len, len)
+}
 
 // PLOTTING
 let target = document.getElementById('main_plot')
