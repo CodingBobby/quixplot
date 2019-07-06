@@ -1,10 +1,13 @@
 const math = remote.getGlobal('math')
 
-document.getElementById('start_screen').style.display = 'none'
+//document.getElementById('start_screen').style.display = 'none'
+
+// Startup
+let enterField = document.getElementById('function_enter')
+enterField.focus()
 
 // PLOTTING
-// let canvas = document.getElementById('main_plot')
-// let ctx = canvas.getContext('2d')
+let target = document.getElementById('main_plot')
 let plotFunction
 
 function functionAnalyzer(string) {
@@ -58,50 +61,27 @@ function submitFunction() {
 
    plotFunction = functionAnalyzer(functionString)
 
-   // hide the overlay
+   // hide the overlay and show plot
    document.getElementById('start_screen').style.display = 'none'
+   target.style.display = 'block'
 
    plotOnCanvas()
 }
 
 function plotOnCanvas() {
-   let data = [{
-      x: [1, 2, 3, 4],
-      y: [10, 15, 13, 17],
-      mode: 'lines',
-      line: {
-         dash: 'solid',
-         width: 1
-      }
-   }]
-
-   let layout = {
-      xaxis: {
-         range: [-1, 1],
-         autorange: false
-      },
-      yaxis: {
-         range: [-1, 1],
-         autorange: false
-      },
-      margin: {
-         l: 30,
-         r: 30,
-         t: 30,
-         b: 30
-      },
-      paper_bgcolor: '#f2f2f2',
-      plot_bgcolor: '#f2f2f2'
+   let func = function(scope) {
+      let x = scope.x
+      return plotFunction(x)
    }
 
-   let options = {
-      displayModeBar: true,
-      showSendToCloud: true,
-      displaylogo: false,
-      modeBarButtonsToRemove: ['autoScale']
-   }
-
-   Plotly.newPlot('main_plot', data, layout, options)
+   functionPlot({
+      target: target,
+      width: target.clientWidth,
+      height: target.clientHeight,
+      grid: true,
+      data: [{
+         graphType: 'polyline',
+         fn: func
+      }]
+   })
 }
-
-plotOnCanvas()

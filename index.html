@@ -5,9 +5,11 @@
     <title>QuixPlot</title>
     <link rel="stylesheet" href="src/css/main.css">
     <link rel="stylesheet" href="src/css/elements.css">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- nodejs requiring -->
     <script>
       const remote = require('electron').remote;
+      window.d3 = require('d3');
+      const functionPlot = require('function-plot');
     </script>
   </head>
   <body>
@@ -17,8 +19,7 @@
 
       <div class="overlay" id="start_screen">
         <form id="function_overlay">
-          <input name="function" type="text" size="30" placeholder="enter a function here">
-          <input type="button" value="plot" onclick="submitFunction()">
+          <input id="function_enter" name="function" type="text" size="30" placeholder="enter a function here" onkeydown="if (event.keyCode == 13) { submitFunction(); return false; }">
         </form>
       </div>
 

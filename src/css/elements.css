@@ -24,6 +24,15 @@ h5 {
 }
 
 
+#main_plot {
+   display: none;
+   background-color: #f2f2f2;
+}
+
+#tools_area {
+   display: none;
+}
+
 .tool_list {
    list-style: none;
 }

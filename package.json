@@ -12,6 +12,8 @@
     "electron": "^5.0.2"
   },
   "dependencies": {
+    "d3": "^3.5.17",
+    "function-plot": "^1.19.1",
     "mathjs": "^6.0.2"
   }
 }
