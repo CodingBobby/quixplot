@@ -17,9 +17,9 @@
   <body>
     <div class="dragger"></div>
     <div id="content">
-      <h1>QuixPlot</h1>
 
       <div class="overlay" id="start_screen">
+        <h1 id="overlay_title">QuixPlot</h1>
         <form id="function_overlay">
           <input id="function_enter" name="function" type="text" size="30" placeholder="enter a function here" value="f(x)=" onkeydown="if (event.keyCode == 13) { submitFunction(); return false; }">
 
@@ -27,6 +27,7 @@
         </form>
       </div>
 
+      <!-- <h1 id="header_title">QuixPlot</h1> -->
 
       <div class="section" id="plot_area">
         <div id="main_plot" style="width:600px;height:500px;"></div>

@@ -51,7 +51,7 @@ table {
 
 /* BASE LAYOUT */
 body {
-   font-family: Karla, sans-serif; 
+   font-family: Karla, sans-serif;
 }
 
 h5 {
@@ -67,7 +67,7 @@ h5 {
    height: 100vh;
    display: grid;
    place-items: center;
-   background-color: #18192B;
+   animation: color-in-background 0.6s;
 }
 
 .overlay form {
@@ -79,6 +79,9 @@ h5 {
    font-size: large;
 }
 
+#header_title {
+   animation: reveal 1.8s;
+}
 
 #main_plot {
    display: none;
@@ -97,7 +100,7 @@ h5 {
    padding-bottom: 15px;
 }
 
-.tool_list :last-child {
+.tool_list:last-child {
    padding-bottom: 0px;
 }
 
@@ -109,38 +112,57 @@ h5 {
    display: inline-flex;
 }
 
+
 /* MODERNIZING */
 *:focus {
    outline: none;
 }
 
-.overlay input {
+#overlay_title {
+   position: absolute;
+   left: 20px;
+   top: 25px;
+   animation: reveal 0.6s;
+}
+
+#function_overlay {
+   animation: move-in-bottom 0.6s;
+}
+
+#function_overlay input {
    padding: 3px;
    padding-left: 15px;
+   border: none;
    font-size: 17px;
    font-weight: bold;
    color: rgba(67,69,68,0.9);
-   border: none;
    transition: 0.2s ease-in;
 }
 
-.overlay input::placeholder {
-   letter-spacing: 0.15em;
+#function_overlay input::placeholder {
+   letter-spacing: 0.1em;
    color: rgba(67,69,68,0.5);
 }
 
 #start_screen form #function_enter {
    margin-bottom: 15px;
+   border-radius: 3px;
 }
 
-#greeting_msg {
+#function_overlay #greeting_msg {
    cursor: pointer;
    margin-left: auto;
    margin-right: auto;
-   font-size: large;
    width: max-content;
+   font-size: large;
    text-align: center;
    color: rgba(142, 142, 146, 0.7);
+   transition: 0.3s ease;
+}
+
+#function_overlay #greeting_msg:hover {
+   color: rgba(142, 142, 146, 0.8);
+   transition: 0.3s ease;
 }
 
 h1 {
@@ -151,4 +173,35 @@ h1 {
 #plot_area {
    display: grid;
    place-items: center;
+}
+
+
+/* ANIMATIONS */
+@keyframes move-in-bottom {
+   0% {
+      transform: translateY(18vh);
+      opacity: 0;
+   }
+   100% {
+      transform: translateY(0);
+      opacity: 100;
+   }
+}
+
+@keyframes color-in-background {
+   0% {
+      background-color: rgb(43, 43, 43);
+   }
+   100% {
+      background-color: #18192B;
+   }
+}
+
+@keyframes reveal {
+   0% {
+      opacity: 0;
+   }
+   100% {
+      opacity: 100;
+   }
 }
