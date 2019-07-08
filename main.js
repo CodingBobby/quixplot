@@ -30,7 +30,7 @@ let window = null
 
 // here we set some options we need later
 const windowOptions = {
-   width: 900,
+   width: 800,
    height: 600,
    resizable: false,
    useContentSize: true,
