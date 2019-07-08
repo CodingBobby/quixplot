@@ -1,7 +1,5 @@
 const math = remote.getGlobal('math')
 
-// document.getElementById('start_screen').style.display = 'none'
-
 // Startup
 let enterField = document.getElementById('function_enter')
 let len = enterField.value.length
@@ -35,35 +33,53 @@ function copyToForm() { // interting text to from when clicking on it
 
 // PLOTTING
 let target = document.getElementById('main_plot')
+let functionString
 let plotFunction
+let symbols = {
+   all: [],
+   variable: [],
+   constant: []
+}
+let scope = {}
+
+function updateScope() {
+   for(let c in symbols.constant) {
+      let constant = symbols.constant[c]
+      scope[constant.name] = constant.value
+   }
+}
+
+function pickNext(syms) {
+   let available = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+   for(let s in syms) {
+      available =  available.filter(a => a !== syms[s])
+   }
+   return available[0] || '_'
+}
 
 function functionAnalyzer(string) {
    let node = math.parse(string)
    let code = node.compile()
 
-   let symbols = {
-      all: [],
-      variable: [],
-      constant: []
-   }
-
    function findSymbols(node, expr) {
       if(expr.args) {
          for(let i in expr.args) {
             let arg = expr.args[i]
-            if(!arg.hasOwnProperty('args')) { // SymbolNode
+            if(!arg.hasOwnProperty('args') && arg.name !== undefined) { // SymbolNode
                if(!symbols.all.includes(arg.name)) {
-                  symbols.all.push(arg.name)
-                  if(node.params.includes(arg.name)) { // variable
+                  let name = arg.name //|| pickNext(symbols.all)
+                  symbols.all.push(name)
+                  if(node.params.includes(name)) { // variable
                      symbols.variable.push({
-                        name: arg.name,
+                        name: name,
                         value: 0
                      })
                   } else { // constant value
                      symbols.constant.push({
-                        name: arg.name,
-                        value: 1
+                        name: name,
+                        value: arg.value || 1
                      })
+
                   }
                }
             } else { // OperatorNode
@@ -75,29 +91,60 @@ function functionAnalyzer(string) {
 
    findSymbols(node, node.expr)
 
-   let scope = {}
-   for(let c in symbols.constant) {
-      let constant = symbols.constant[c]
-      scope[constant.name] = constant.value
-   }
+   updateScope()
 
    return code.evaluate(scope) // can be executed later
 }
 
 function submitFunction() {
    let form = document.getElementById('function_overlay')
-   let functionString = form.elements['function'].value
-
-   plotFunction = functionAnalyzer(functionString)
+   functionString = form.elements['function'].value
 
    // hide the overlay and show plot
    document.getElementById('start_screen').style.display = 'none'
    target.style.display = 'block'
+   let toolarea = document.getElementById('tools_area')
+   toolarea.style.display = 'block'
+   let constantarea = document.getElementById('constant_definition')
 
    plotOnCanvas()
+
+   for(let c in symbols.constant) {
+      let cs = symbols.constant[c]
+      let newslider = document.createElement(`ul`)
+      newslider.className = 'changer'
+      newslider.id = `${cs.name}_constant_changer`
+      newslider.innerHTML = `<h5>${cs.name}:</h5><input type="text" value="${cs.value}">`
+      constantarea.appendChild(newslider)
+   }
+
+   $('.changer input').each(function() {
+      let elem = $(this)
+      // extracting constant name from id
+      let elem_id = elem.parent()[0].id
+      elem_id = elem_id.replace('_constant_changer', '')
+
+      // saving current value and constant's name as property
+      elem.data('oldVal', elem.val())
+      elem.data('constName', elem_id)
+   
+      // looking for events inside the text field
+      elem.bind("propertychange change click input paste", function(event) {
+         // if value has changed
+         if(elem.data('oldVal') != elem.val()) {
+            let newval = elem.val().toString() !== '' ? elem.val().replace(' ', '') : 0
+            elem.data('oldVal', newval)
+            symbols.constant.filter(s => s.name == elem.data('constName'))[0].value = newval
+
+            plotOnCanvas()
+         }
+      })
+   })
 }
 
 function plotOnCanvas() {
+   plotFunction = functionAnalyzer(functionString)
+
    let func = function(scope) {
       let x = scope.x
       return plotFunction(x)
