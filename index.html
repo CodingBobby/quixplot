@@ -13,6 +13,7 @@
       window.d3 = require('d3');
       const functionPlot = require('function-plot');
     </script>
+    <script src="https://kit.fontawesome.com/0cd8c40424.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
@@ -23,9 +24,10 @@
     <div class="dragger"></div>
     <div id="content">
 
-      <table class="on_top_all circle" id="donate_button"><tr>
-        <td><img src="assets/mug.png"></td>
-      </tr></table>
+      <div class="on_top_all circle" id="donate_button">
+        <p class="hidden">Donate?</p>
+        <i class="fas fa-mug-hot fa-2x" onclick="openDonate()"></i>
+      </div>
 
       <div class="overlay" id="start_screen">
         <form id="function_overlay">

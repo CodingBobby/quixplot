@@ -21,6 +21,8 @@ const {
    shell
 } = electron
 
+global.shell = shell
+
 // boolean checks that we need frequently
 let darwin = process.platform == 'darwin'
 process.env.NODE_ENV = 'production'
@@ -56,11 +58,11 @@ let menuTemplate = [{
       accelerator: 'CmdOrCtrl+N',
       role: 'reload'
    }, {
-      type: "separator"
-   }, {
-      label: 'About',
+      label: 'Hide QuixPlot',
+      accelerator: darwin ? 'Command+H'
+         : 'Ctrl+H',
       click() {
-         shell.openExternal('https://codingbobby.xyz')
+         app.hide()
       }
    }, {
       label: 'Quit QuixPlot',
@@ -68,6 +70,18 @@ let menuTemplate = [{
          : 'Ctrl+Q',
       click() {
          app.quit()
+      }
+   }, {
+      type: "separator"
+   }, {
+      label: 'About',
+      click() {
+         shell.openExternal('https://github.com/CodingBobby/quixplot')
+      }
+   }, {
+      label: 'Donate',
+      click() {
+         shell.openExternal('https://paypal.me/CodingBobby')
       }
    }]
 }, {
