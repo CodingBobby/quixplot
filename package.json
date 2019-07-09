@@ -1,25 +1,33 @@
 {
   "name": "quixplot",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodingBobby/quixplot"
+  },
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/icon.icns --prune=true --out=release-builds",
-    "package-win": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"QuixPlot\"",
-    "package-linux": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/icon.png --prune=true --out=release-builds"
+    "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --prune=true --out=release-builds --version-string.CompanyName=CodingBobby --version-string.ProductName=QuixPlot",
+    "package-linux": "electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/icon.png --prune=true --out=release-builds"
   },
   "author": "CodingBobby",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^5.0.2",
-    "electron-builder": "^20.44.4"
+    "electron": "^5.0.6",
+    "electron-builder": "^20.44.4",
+    "electron-packager": "^14.0.1"
   },
   "dependencies": {
+    "@extra-array/linspace": "^1.1.7",
+    "array-unique": "^0.3.2",
+    "compute-logspace": "^1.0.0",
     "d3": "^3.5.17",
     "function-plot": "^1.19.1",
-    "mathjs": "^6.0.2"
+    "mathjs": "^6.0.3"
   }
 }

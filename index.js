@@ -1,7 +1,5 @@
 const math = remote.getGlobal('math')
 
-// document.getElementById('start_screen').style.display = 'none'
-
 // Startup
 let enterField = document.getElementById('function_enter')
 let len = enterField.value.length
@@ -9,11 +7,15 @@ enterField.focus()
 // jumping to end of pre-entered text
 enterField.setSelectionRange(len, len)
 
+let startScreen = document.getElementById('start_screen')
+let mainContent = document.getElementById('main_content')
+
 let greet = document.getElementById('greeting_msg')
 let opts = [
-   'sin(x) + log(x+4)',
-   'gamma(x)',
-   '1/x * cos(1/x)',
+   'sin(x) + log(x+a)',
+   '1/a * gamma(x)',
+   '1/a * cos(1/x)',
+   '1/a * cos(1/x) - sin(x/b)',
    'nthRoot(x, 3)'
 ]
 
@@ -35,34 +37,57 @@ function copyToForm() { // interting text to from when clicking on it
 
 // PLOTTING
 let target = document.getElementById('main_plot')
+let functionString
+let functionLatex
 let plotFunction
+let symbols = {
+   all: [],
+   variable: [],
+   constant: []
+}
+let scope = {}
+
+function updateScope() {
+   for(let c in symbols.constant) {
+      let constant = symbols.constant[c]
+      scope[constant.name] = constant.value
+   }
+}
+
+function pickNext(syms) {
+   let available = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+   for(let s in syms) {
+      available =  available.filter(a => a !== syms[s])
+   }
+   return available[0] || '_'
+}
 
 function functionAnalyzer(string) {
    let node = math.parse(string)
    let code = node.compile()
 
-   let symbols = {
-      all: [],
-      variable: [],
-      constant: []
-   }
+   functionLatex = node.toTex()
 
    function findSymbols(node, expr) {
       if(expr.args) {
          for(let i in expr.args) {
             let arg = expr.args[i]
-            if(arg.hasOwnProperty('name')) { // SymbolNode
-               symbols.all.push(arg.name)
-               if(node.params.includes(arg.name)) { // variable
-                  symbols.variable.push({
-                     name: arg.name,
-                     value: 0
-                  })
-               } else { // constant value
-                  symbols.constant.push({
-                     name: arg.name,
-                     value: 1
-                  })
+            if(!arg.hasOwnProperty('args') && arg.name !== undefined) { // SymbolNode
+               if(!symbols.all.includes(arg.name)) {
+                  let name = arg.name //|| pickNext(symbols.all)
+                  symbols.all.push(name)
+                  if(node.params.includes(name)) { // variable
+                     symbols.variable.push({
+                        name: name,
+                        value: 0
+                     })
+                  } else { // constant value
+                     symbols.constant.push({
+                        name: name,
+                        value: arg.value || 1
+                     })
+
+                  }
                }
             } else { // OperatorNode
                findSymbols(node, arg)
@@ -73,29 +98,74 @@ function functionAnalyzer(string) {
 
    findSymbols(node, node.expr)
 
-   let scope = {}
-   for(let c in symbols.constant) {
-      let constant = symbols.constant[c]
-      scope[constant.name] = constant.value
-   }
+   updateScope()
 
    return code.evaluate(scope) // can be executed later
 }
 
 function submitFunction() {
    let form = document.getElementById('function_overlay')
-   let functionString = form.elements['function'].value
-
-   plotFunction = functionAnalyzer(functionString)
+   functionString = form.elements['function'].value
 
    // hide the overlay and show plot
-   document.getElementById('start_screen').style.display = 'none'
-   target.style.display = 'block'
+   startScreen.style.display = 'none'
+   mainContent.style.display = 'grid'
+   let constantarea = document.getElementById('constant_definition')
 
    plotOnCanvas()
+
+   for(let c in symbols.constant) {
+      let cs = symbols.constant[c]
+      let newslider = document.createElement(`ul`)
+      newslider.className = 'changer'
+      newslider.id = `${cs.name}_constant_changer`
+      newslider.innerHTML = `<h5>${cs.name}:</h5><input type="text" value="${cs.value}">`
+      constantarea.appendChild(newslider)
+   }
+
+   if(symbols.constant.length === 0) {
+      let placeholder = document.createElement('div')
+      placeholder.className = 'placeholder'
+      placeholder.innerHTML = 'no constants in function'
+      constantarea.appendChild(placeholder)
+   } 
+
+   $('.changer input').each(function() {
+      let elem = $(this)
+      // extracting constant name from id
+      let elem_id = elem.parent()[0].id
+      elem_id = elem_id.replace('_constant_changer', '')
+
+      // saving current value and constant's name as property
+      elem.data('oldVal', math.evaluate(elem.val()))
+      elem.data('constName', elem_id)
+   
+      // looking for events inside the text field
+      elem.bind("propertychange change click input paste", function(event) {
+         // if value has changed
+         if(elem.data('oldVal') != math.evaluate(elem.val())) {
+            let newval = math.evaluate(elem.val()).toString() !== '' ? math.evaluate(elem.val()).toString().replace(' ', '') : 0
+            elem.data('oldVal', newval)
+            symbols.constant.filter(s => s.name == elem.data('constName'))[0].value = newval
+
+            plotOnCanvas()
+         }
+      })
+   })
+
+   // adding a new box with the function
+   let fbox = document.getElementById('function_box')
+   let fboxp = document.createElement('p')
+   fboxp.innerHTML = '$$'+functionLatex+'$$'
+   fbox.appendChild(fboxp)
+   
+   // reloading MathJax
+   MathJax.Hub.Queue(["Typeset",MathJax.Hub])
 }
 
 function plotOnCanvas() {
+   plotFunction = functionAnalyzer(functionString)
+
    let func = function(scope) {
       let x = scope.x
       return plotFunction(x)
@@ -111,4 +181,10 @@ function plotOnCanvas() {
          fn: func
       }]
    })
+}
+
+
+function toOverlay() {
+   startScreen.style.display = 'grid'
+   mainContent.style.display = 'none'
 }

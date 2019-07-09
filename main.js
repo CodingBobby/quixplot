@@ -21,9 +21,9 @@ const {
    shell
 } = electron
 
-// configuration and boolean checks that we need frequently
-let config = JSON.parse(fs.readFileSync('./config.json', 'utf8'))
+// boolean checks that we need frequently
 let darwin = process.platform == 'darwin'
+process.env.NODE_ENV = 'production'
 
 // instances we define later on but need to be accessible globally
 let window = null
@@ -31,12 +31,12 @@ let window = null
 // here we set some options we need later
 const windowOptions = {
    width: 900,
-   height: 600,
+   height: 650,
    resizable: false,
    useContentSize: true,
    titleBarStyle: 'hidden',
    backgroundColor: '#1C1C1C',
-   title: `${config.app.name}`,
+   title: 'QuixPlot',
    icon: darwin ? path.join(__dirname, 'assets/icons/app.icns')
       : path.join(__dirname, 'assets/icons/app.ico'),
    show: true,
@@ -50,7 +50,7 @@ const windowOptions = {
 // here we create a template for the main menu,
 // to get the right shortcut, we check if we're running on darwin
 let menuTemplate = [{
-   label: `${config.app.name}`,
+   label: 'QuixPlot',
    submenu: [{
       label: 'New Function',
       accelerator: 'CmdOrCtrl+N',
@@ -63,7 +63,7 @@ let menuTemplate = [{
          shell.openExternal('https://codingbobby.xyz')
       }
    }, {
-      label: `Quit ${config.app.name}`,
+      label: 'Quit QuixPlot',
       accelerator: darwin ? 'Command+Q'
          : 'Ctrl+Q',
       click() {
@@ -124,13 +124,6 @@ async function build() {
    window.on('restore', () => {
       window.focus()
    })
-}
-
-// this function can be called to save changes in the config file
-function saveConfig() {
-  fs.writeFile('./config.json', JSON.stringify(config), err => {
-    if(err) console.error(err)
-  })
 }
 
 // here we finally build the app
