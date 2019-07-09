@@ -188,3 +188,8 @@ function toOverlay() {
    startScreen.style.display = 'grid'
    mainContent.style.display = 'none'
 }
+
+function openDonate() {
+   let shell = remote.getGlobal('shell')
+   shell.openExternal('https://paypal.me/CodingBobby')
+}

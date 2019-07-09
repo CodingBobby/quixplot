@@ -145,30 +145,55 @@ h5 {
 }
 
 .circle {
-   border-radius: 100%;
+   /* border-radius: 100%; */
 }
 
 #donate_button {
-   display: none;
-   background-color: #f2f2f22f;
-   height: 40px;
-   width: 40px;
-   right: 15px;
-   bottom: 15px;
+   cursor: pointer;
+   color: rgba(142, 142, 146, 0.7);
+   background-color: rgba(47, 47, 66, 0.4);
+   height: 35px;
+   width: 35px;
+   right: 14px;
+   bottom: 13px;
+   font-size: 10px;
+   line-height: 10px;
+   display: grid;
+   grid-template-rows: 2fr auto 2fr;
+   grid-template-columns: 1fr 6px 6fr auto 6px;
+   transition: 0.3s ease;
+   border-radius: 40px;
+}
+
+#donate_button .fas {
+   line-height: inherit;
+   grid-column: 4;
+   grid-row: 2;
 }
 
 #donate_button:hover {
-   bottom: 17px;
+   transition: 0.3s ease;
+   color: rgba(142, 142, 146, 0.8);
+   text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.6);
+   background-color: rgba(47, 47, 66, 0.5);
+   width: 100px;
 }
 
-#donate_button td {
-   vertical-align: middle;
-   text-align: center;
+#donate_button .hidden {
+   width: 0;
+   display: none;
+   grid-column: 2;
+   grid-row: 2;
+   left: 6px;
+   font-size: 16px;
+   transition: 0.5s ease;
 }
 
-#donate_button td img {
-   height: 32px;
-   width: 32px;
+#donate_button:hover .hidden {
+   text-shadow: none;
+   display: inline-block;
+   transition: 1s ease;
+   animation: reveal-late 0.3s;
 }
 
 
@@ -278,6 +303,17 @@ h2 {
    }
 }
 
+@keyframes move-hover {
+   0% {
+      transform: translateY(0);
+      opacity: 0;
+   }
+   100% {
+      transform: translateY(2px);
+      opacity: 100;
+   }
+}
+
 @keyframes color-in-background {
    0% {
       background-color: rgb(43, 43, 43);
@@ -289,6 +325,18 @@ h2 {
 
 @keyframes reveal {
    0% {
+      opacity: 0;
+   }
+   100% {
+      opacity: 100;
+   }
+}
+
+@keyframes reveal-late {
+   0% {
+      opacity: 0;
+   }
+   33% {
       opacity: 0;
    }
    100% {
