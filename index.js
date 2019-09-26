@@ -147,7 +147,7 @@ function submitFunction() {
       elem.bind("propertychange change click input paste", function(event) {
          // if value has changed
          if(elem.data('oldVal') != math.evaluate(elem.val())) {
-            let newval = math.evaluate(elem.val()).toString() !== '' ? math.evaluate(elem.val()).toString().replace(' ', '') : 0
+            let newval = elem.val() !== '' ? math.evaluate(elem.val()).toString().replace(' ', '') : 1
             elem.data('oldVal', newval)
             symbols.constant.filter(s => s.name == elem.data('constName'))[0].value = newval
 
@@ -171,10 +171,42 @@ function submitFunction() {
 function plotOnCanvas() {
    plotFunction = functionAnalyzer(functionString)
 
+   // ORIGINAL FUNCTION
    let func = function(scope) {
       let x = scope.x
       return plotFunction(x)
    }
+
+   // ORIGINAL DATA
+   let data = []
+   let range = [-20, 20]
+   let t = 0.1
+
+   for(let x=range[0]; x<range[1]; x+=t) {
+      data.push([x, plotFunction(x)])
+   }
+
+   // DERIVATION DATA
+   let deriData = []
+
+   function derivate(p, q) {
+      return (q[1]-p[1])/(q[0]-p[0])
+   }
+
+   for(let x=range[0]; x<range[1]; x+=t) {
+      deriData.push([x, derivate([x, plotFunction(x)], [x+t, plotFunction(x+t)])])
+   }
+
+   // DERIVATION FUNCTION
+   let interFunc = d3.scale.linear()
+      .domain(deriData.map(d => d[0]))
+      .range(deriData.map(d => d[1]))
+
+   let deriFunc = function(scope) {
+      let x = scope.x
+      return interFunc(x)
+   }
+
 
    functionPlot({
       target: target,
@@ -182,8 +214,21 @@ function plotOnCanvas() {
       height: target.clientHeight,
       grid: true,
       data: [{
+      //    graphType: 'scatter',
+      //    fnType: 'points',
+      //    points: data
+      // }, {
+      //    graphType: 'scatter',
+      //    fnType: 'points',
+      //    points: deriData
+      // }, {
          graphType: 'polyline',
+         fnType: 'linear',
          fn: func
+      }, {
+         graphType: 'polyline',
+         fnType: 'linear',
+         fn: deriFunc
       }]
    })
 }
