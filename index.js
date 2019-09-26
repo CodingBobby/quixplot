@@ -112,6 +112,9 @@ function submitFunction() {
    mainContent.style.display = 'grid'
    let constantarea = document.getElementById('constant_definition')
 
+
+   constantarea.innerHTML = ''
+
    plotOnCanvas()
 
    for(let c in symbols.constant) {
@@ -155,6 +158,8 @@ function submitFunction() {
 
    // adding a new box with the function
    let fbox = document.getElementById('function_box')
+   fbox.innerHTML = ''
+
    let fboxp = document.createElement('p')
    fboxp.innerHTML = '$$'+functionLatex+'$$'
    fbox.appendChild(fboxp)

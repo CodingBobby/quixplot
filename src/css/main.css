@@ -11,6 +11,7 @@
 body {
    color: #D2CDCC;
    background-color: #18192B;
+   overflow: hidden;
 }
 
 #content {
