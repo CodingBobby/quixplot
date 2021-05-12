@@ -28,6 +28,6 @@
     "compute-logspace": "^1.0.0",
     "d3": "^3.5.17",
     "function-plot": "^1.19.1",
-    "mathjs": "^6.0.3"
+    "mathjs": "^7.5.1"
   }
 }
